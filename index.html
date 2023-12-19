@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        #loginForm {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Login Checker</h1>
+    <form id="loginForm">
+        <label for="login">Login:</label>
+        <input type="text" id="login" name="login" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+        <button type="button" onclick="checkLogin()">Check Login</button>
+    </form>
+    <p id="result"></p>
+
+    <script>
+        function checkLogin() {
+            var enteredLogin = document.getElementById("login").value;
+            var enteredPassword = document.getElementById("password").value;
+
+            // Запрос к GitHub API для получения содержимого файла
+            fetch("https://api.github.com/repos/butis21/LoginTST/contents/logins.txt")
+                .then(response => response.json())
+                .then(data => {
+                    // Декодирование содержимого файла из base64
+                    var decodedContent = atob(data.content);
+                    var credentials = decodedContent.split('\n');
+
+                    // Проверка введенных данных
+                    for (var i = 0; i < credentials.length; i++) {
+                        var [login, password] = credentials[i].split(':');
+                        if (enteredLogin === login && enteredPassword === password) {
+                            document.getElementById("result").innerText = "Right!";
+                            return;
+                        }
+                    }
+
+                    document.getElementById("result").innerText = "False!";
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
