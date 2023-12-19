@@ -1,5 +1,5 @@
-user1:hashed_password1
-user2:hashed_password2
-user3:hashed_password3
+user1:password1
+user2:password2
+user3:password3
 admin:admin
 123123:123122
